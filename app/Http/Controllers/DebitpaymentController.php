@@ -85,6 +85,8 @@ class DebitpaymentController extends Controller
             $company_d = DB::table('companies')->where('id', $request->input('company_id'))->first();
             $user_d = DB::table('users')->where('user_id', $loginUser)->first();
             $fos_d = DB::table('users')->where('user_id', $fosid)->first();
+            print_r($fos_d);
+            // die;
             $dis_d = DB::table('users')->where('user_id', $distributorid)->first();
            Mail::send('PaymentMail', array( 
             'shop_name' => $user_d->shop,
@@ -97,6 +99,11 @@ class DebitpaymentController extends Controller
             'form_message' => "Payment Detail !!", 
         ), function($message) use ($user_d, $dis_d, $fos_d){
             $message->from('info@globalaccountingsystem.com');
+            // echo "user_d email id is " . $user_d->email . "<br>";
+            echo "fos_d email id is " . $fos_d->email . "<br>";
+            echo "dis_d email id is " . $dis_d->email . "<br>";
+            // return
+            // die;
             $message->to([$user_d->email,$fos_d->email,$dis_d->email], 'User')->subject('GAS Payment Detail');
         }); 
         }
@@ -176,10 +183,12 @@ class DebitpaymentController extends Controller
             $total_balance = $post_balance - $new_amount;
             $debit->total_balance = $total_balance;
         }
+
         $debit->paycollection_id = $loginUser;
         $debit->collect_date = date('Y-m-d');
         $debit->payment_collect = $request->input('payment_collect');
         $debit->collect_remarks = $request->input('remarks');
+        
         $debit->save();
         if($debit){
           $cb = DB::table('companybalances')->where('company_id',$debit->company_id)->where('retailer_id',$debit->user_id)->where('distributor_id',$distributorid)->select('amount')->first();
@@ -190,9 +199,17 @@ class DebitpaymentController extends Controller
           DB::table('companybalances')->where('company_id',$debit->company_id)->where('retailer_id',$debit->retailer_id)->where('distributor_id',$distributorid)->update(['amount' => $tcb]);
           }
           $company_d = DB::table('companies')->where('id', $debit->company_id)->first();
+          #updated company amount after collecting return amount
+          $cmp_amount = $company_d->amount;
+          $total_cmp_amount = $cmp_amount + $npa;
+
+          DB::table('companies')->where('id', $debit->company_id)->update(['amount' => $total_cmp_amount]);
+
           $user_d = DB::table('users')->where('user_id', $debit->user_id)->first();
-          $fos_d = DB::table('users')->where('user_id', $debit->fos_id)->first();
+          $fos_d = DB::table('users')->where('user_id', $debit->fos_id)->first();        
           $dis_d = DB::table('users')->where('user_id', $debit->distributor_id)->first();
+
+          $npa;
          Mail::send('PaymentAcceptMail', array( 
           'shop_name' => $user_d->shop,
           'Retailer_name' => $user_d->name,  

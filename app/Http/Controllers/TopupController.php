@@ -22,7 +22,20 @@ class TopupController extends Controller
         $loginUser = $request->session()->get('loginUser');
         $distributorid = $request->session()->get('logindistributor');
         $data['topup'] = DB::table('topups')->where('status', '0')->where('distributor_id', $distributorid)->where('user_id', $loginUser)->orderby('id', 'DESC')->take(5)->get();
-        $data['company'] = DB::table('companies')->where('distributor_id', $distributorid)->get();
+        // $data['company'] = DB::table('companies')->where('distributor_id', $distributorid)->get();
+        $data['company'] = DB::table('companies')
+        ->join(
+            'company_access_requests',
+            'companies.id',
+            '=',
+            'company_access_requests.company_id'
+        )
+        ->where('companies.distributor_id', $distributorid)
+        ->where('company_access_requests.user_id', $loginUser)
+        ->where('company_access_requests.status', 1) // Approved only
+        ->select('companies.*')
+        ->distinct()
+        ->get();
         return view('topup.add-topup', $data);
     }
 
@@ -51,6 +64,14 @@ class TopupController extends Controller
 
     public function create(Request $request)
     {
+        $access = CompanyAccessRequest::where('company_id',$request->company_id)->where('user_id',$loginUser)->where('status',1)->exists();
+
+        if (!$access) {
+            return back()->with(
+                'status',
+                'Company access not approved.'
+            );
+        }        
         $loginUser = $request->session()->get('loginUser');
         $distributorid = $request->session()->get('logindistributor');
         $supdistid = $request->session()->get('loginsupdist');
@@ -251,4 +272,7 @@ class TopupController extends Controller
         $topup->delete();
         return redirect(route('view-topup'))->with('status', 'Topup Delete Successfully');
     }
+
+
+
 }

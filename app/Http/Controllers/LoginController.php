@@ -24,12 +24,13 @@ class LoginController extends Controller
     
       public function loginuser(Request $request){
             $validator = $request->validate([
-                'user_id' => 'required',
+                'user_id' => 'nullable|required_without:mobile',
+                'mobile'  => 'nullable|required_without:user_id',
                 'password' => 'required'
             ]);
            
     
-            $user = DB::table('users')->where('user_id', '=', $request->user_id)->first();
+            $user = DB::table('users')->where('user_id', '=', $request->user_id)->orWhere('phone', $request->phone)->first();
             if($user){
                 if($request->input('password') == $user->password){
                     if($user->status == '1'){

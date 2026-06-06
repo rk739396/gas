@@ -95,6 +95,7 @@
                     <th style="text-wrap : nowrap !important" >Credit</th>
                     <th style="text-wrap : nowrap !important" >Debit</th>
                     <th style="text-wrap : nowrap !important" >Runing Balance</th>
+                    <th style="text-wrap : nowrap !important" >Total</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -115,10 +116,12 @@
                     </td>
                     @php $company =  DB::table('companies')->where('id', $topups->company_id)->first();  @endphp
                     <td style="text-wrap : nowrap !important">@if($topups->topup_type == '1') @if($topups->status == '1') ACCEPT_ @else PENDING_ @endif CREDIT_TOPUP_ {{$company->name}} @elseif($topups->topup_type == '2')  @if($topups->	payment_collect == '1') ACCEPT_ @else PENDING_ @endif DEBIT_TOPUP_ {{$company->name}} @endif</td>
-                    <td style="text-wrap : nowrap !important">{{$topups->opening_balance ?? '0.00' }}</td>
+                    <!-- <td style="text-wrap : nowrap !important">{{$topups->opening_balance ?? '0.00' }}</td> -->
+                    <td style="text-wrap : nowrap !important">{{'0.00' }}</td>
                     <td style="text-wrap : nowrap !important">{{$topups->amount}}</td>
                     <td style="text-wrap : nowrap !important">{{$topups->total_amount ?? '0.00' }}</td>
                     <td style="text-wrap : nowrap !important">{{$topups->total_balance}}</td>
+                    <td style="text-wrap : nowrap !important">{{$topups->opening_balance ?? '0.00' }}</td>
                   </tr>
                   @php 
                     $count++;

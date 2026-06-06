@@ -14,6 +14,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\CreditchargeController;
+use App\Http\Controllers\CompanyAccessRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::get('/update-user/{id}',[UserController::class, 'edit']);
 Route::put('/update-user/{id}', [UserController::class, 'update']);
 Route::get('/delete-user/{id}', [UserController::class, 'destroy']);
 Route::post('/update-password', [UserController::class, 'update_password'])->name('update-password');
+Route::get('/users/role/{role_id}', [UserController::class, 'getUsersByRole'])->name('users-by-role');
 
 // loginusercontroller 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -131,3 +133,33 @@ Route::get('/order/view-order',[OrderController::class, 'view'])->name('view-ord
 
 Route::get('/notes/add-notes',[NoteController::class, 'index'])->name('add-notes');
 Route::post('/notes/save-notes',[NoteController::class, 'create'])->name('save-notes');
+
+// Company Access Request
+
+
+// Retailer
+Route::get('/request-company-access',
+    [CompanyAccessRequestController::class, 'index'])
+    ->name('request-company-access');
+
+Route::get(
+    '/my-company-access-request',
+    [CompanyAccessRequestController::class, 'myRequests']
+)->name('my-company-access-request');    
+
+Route::post('/save-company-access-request',
+    [CompanyAccessRequestController::class, 'store'])
+    ->name('save-company-access-request');
+
+// Topup Team
+Route::get('/view-company-access-request',
+    [CompanyAccessRequestController::class, 'view'])
+    ->name('view-company-access-request');
+
+Route::get('/approve-company-access-request/{id}',
+    [CompanyAccessRequestController::class, 'approve'])
+    ->name('approve-company-access-request');
+
+Route::get('/reject-company-access-request/{id}',
+    [CompanyAccessRequestController::class, 'reject'])
+    ->name('reject-company-access-request');

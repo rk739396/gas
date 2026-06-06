@@ -242,6 +242,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    public function getUsersByRole(Request $request, $role_id){
+        // $user = DB::table('users')->where('role', '=', $request->input('role'))->first();
+        $users = DB::table('users')->where('role', '4')->select('user_id', 'name')->get();
+
+        return response()->json($users);
+    }
+
     public function destroy(string $id)
     {
         $user = User::find($id);

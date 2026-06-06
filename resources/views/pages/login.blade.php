@@ -51,6 +51,18 @@
             </div>
           </div>
         </div>
+            <span style="text-align:center; display:block;">OR</span>
+        <div class="input-group mb-3 d-flex flex-column">
+          <label for="phone" class="text-muted mb-0">Mobile Number</label>
+          <div class="input-group ">
+            <input type="text" class="form-control" name="phone" id="mail" onkeydown="updateMail()" placeholder="Enter User Id">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="input-group mb-3">
           <label for="password" class="text-muted mb-0">Password</label>
           <div class="input-group ">

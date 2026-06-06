@@ -17,9 +17,11 @@ return new class extends Migration
             $table->string('distributor_id')->nullable();
             $table->string('company_id')->nullable();
             $table->string('retailer_id')->nullable();
-            $table->string('cr_amount')->nullable();
+            $table->string('ch_amount')->nullable();
+            $table->string('operation')->nullable();
             $table->string('total_balance')->nullable();
             $table->string('remarks', 2000)->nullable();
+            $table->string('date')->nullable();
             $table->timestamps();
         });
     }

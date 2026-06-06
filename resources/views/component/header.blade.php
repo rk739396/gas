@@ -470,6 +470,21 @@
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ route('view-company-access-request') }}" class="nav-link">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>
+                                    Company Requests
+
+                                    @if(isset($pendingAccessRequests) && $pendingAccessRequests > 0)
+                                        <span class="right badge badge-danger">
+                                            {{ $pendingAccessRequests }}
+                                        </span>
+                                    @endif
+                                </p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-fw fa-credit-card"></i>
                                 <p>
@@ -674,6 +689,26 @@
                                 
                             </ul>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-building"></i>
+                                <p>
+                                    Company Access
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="{{ route('request-company-access') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Request Access</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>                        
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
